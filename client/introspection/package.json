@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "json-server": "json-server --watch ./tests/json-server/db.json"
   },
   "dependencies": {
     "@fluentui/react": "^8.106.5",

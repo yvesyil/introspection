@@ -1,0 +1,63 @@
+{
+  "compilers": [
+    {
+      "id": 0,
+      "name": "clang",
+      "version": "x.x.x",
+      "languages": [
+        0
+      ]
+    },
+    {
+      "id": 1,
+      "name": "gcc",
+      "version": "x.x.x",
+      "languages": [
+        0
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "id": 0,
+      "name": "C",
+      "version": "x"
+    }
+  ],
+  "users": [
+    {
+      "id": 0,
+      "name": "root",
+      "password": "root"
+    }
+  ],
+  "environments": [
+    {
+      "id": 0,
+      "userId": 0,
+      "directories": [
+        0
+      ],
+      "files": []
+    }
+  ],
+  "directories": [
+    {
+      "id": 0,
+      "name": "src",
+      "environmentId": 0,
+      "files": [
+        0
+      ]
+    }
+  ],
+  "files": [
+    {
+      "id": 0,
+      "name": "main.c",
+      "type": "c-source",
+      "content": "// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf(\"Hello, World!\");\n\treturn 0;\n}\n",
+      "directoryId": 0
+    }
+  ]
+}
