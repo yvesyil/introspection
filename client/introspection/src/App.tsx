@@ -15,20 +15,11 @@ import { makeStyles, useId, Select } from '@fluentui/react-components';
 import './App.css';
 import GithubDarkTheme from './assets/github-dark.json';
 import { useEffect } from "react";
-
-const heightOfMenu = 60;
-const heightOfEditor = window.innerHeight - heightOfMenu;
-
-const useStyles = makeStyles({
-  editor_container: {
-    display: 'flex',
-    height: `${heightOfEditor}px`,
-  },
-});
+import { Nav } from './components/Nav';
 
 
 function App() {
-  const classes = useStyles();
+
   const editorFont = "'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New', monospace";
 
   const defaultCode = `// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf("Hello, World!");\n\treturn 0;\n}\n`;
@@ -42,31 +33,17 @@ function App() {
     }
   }, [monaco]);
 
-  let selectId = useId();
+  const heightOfMenu = 60;
+  const heightOfEditor = window.innerHeight - heightOfMenu;
 
   return (
     <div id="container">
+      <Nav height={60} />
+      
       <div style={{
         display: 'flex',
-        justifyContent: 'space-between',
-        height: `${heightOfMenu}px`
+        height: `${heightOfEditor}px`,
       }}>
-        <Button shape="square">Compile</Button>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          width: '150px',
-          justifyContent: 'space-between',
-          margin: '10px',
-        }}>
-          <label htmlFor={selectId}>Compiler</label>
-          <Select id={selectId}>
-            <option>clang</option>
-            <option>gcc</option>
-          </Select>
-        </div>
-      </div>
-      <div className={classes.editor_container}>
         <Editor
           width="50vw"
           defaultLanguage="c"
