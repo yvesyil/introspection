@@ -4,17 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 6969",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "json-server": "json-server --watch ./tests/json-server/db.json"
+    "json-server": "json-server --watch ./tests/json-server/db.json --routes ./tests/json-server/routes.json"
   },
   "dependencies": {
     "@fluentui/react": "^8.106.5",
     "@fluentui/react-components": "^9.18.0",
     "@monaco-editor/react": "^4.4.6",
+    "formik": "^2.2.9",
     "monaco-editor": "^0.36.1",
     "react": "^18.2.0",
+    "react-auth-kit": "^2.9.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0"
   },

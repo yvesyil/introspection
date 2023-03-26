@@ -27,6 +27,7 @@
   "users": [
     {
       "id": 0,
+      "email": "",
       "name": "root",
       "password": "root"
     }

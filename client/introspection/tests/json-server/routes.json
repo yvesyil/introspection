@@ -1,0 +1,5 @@
+{
+  "/api/*": "/$1",
+  "/environments/:id": "/environments/:id?_embed=directories",
+  "/directories/:id": "/directories/:id?_embed=files"
+}
