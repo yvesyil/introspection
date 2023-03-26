@@ -1,6 +1,5 @@
 import { Button, Select, useId } from "@fluentui/react-components";
-
-import { makeStyles } from '@fluentui/react-components';
+import { Link } from "react-router-dom";
 
 import styles from './Nav.module.css';
 
@@ -28,7 +27,9 @@ export function Nav({ height }: { height: number }) {
           <option>clang</option>
           <option>gcc</option>
         </Select>
-        <Button className={styles.button}>Login</Button>
+        <Link className={styles.link} to={`/login`}>
+          <Button className={styles.button}>Login</Button>
+        </Link>
       </div>
     </div>
   );

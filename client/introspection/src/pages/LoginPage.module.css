@@ -1,0 +1,22 @@
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.card {
+  padding: 20px;
+}
+
+.form {
+  text-align: center;
+}
+
+.formItem {
+  margin: 10px 20px;
+}
+
+#submit {
+  margin-top: 20px;
+}

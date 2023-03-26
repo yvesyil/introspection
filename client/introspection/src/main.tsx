@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { FluentProvider, teamsDarkTheme, Theme } from '@fluentui/react-components';
 import App from './App';
+import { AuthProvider } from 'react-auth-kit';
 
 import './index.css';
 
@@ -13,7 +14,12 @@ const theme: Theme = {
 };
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <FluentProvider theme={theme}>
-    <App />
-  </FluentProvider>
+  <AuthProvider authType = {'cookie'}
+    authName={'_auth'}
+    cookieDomain={window.location.hostname}
+    cookieSecure={window.location.protocol === "https:"}>
+    <FluentProvider theme={theme}>
+      <App />
+    </FluentProvider>
+  </AuthProvider>
 );

@@ -1,4 +1,8 @@
-button {
+.button {
   height: 35px;
   margin: 10px;
+}
+
+.link {
+  text-decoration: none; 
 }
