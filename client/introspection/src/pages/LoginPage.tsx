@@ -1,6 +1,6 @@
 import { Button, Card, Input, Label, Title1, useId } from '@fluentui/react-components';
-import { FormEvent, useState } from 'react';
-import {useSignIn} from 'react-auth-kit';
+import { FormEvent, useEffect, useState } from 'react';
+import {useIsAuthenticated, useSignIn} from 'react-auth-kit';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './LoginPage.module.css';
@@ -11,12 +11,18 @@ export default function LoginPage() {
   const passwordId = useId("password");
   const signIn = useSignIn();
   const navigate = useNavigate();
+  const isAuthenticated = useIsAuthenticated();
 
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
 
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate('/');
+    }
+  }, [isAuthenticated]);
 
   const handleChange = (event: any) => {
     const { name, value } = event.target;
@@ -50,8 +56,6 @@ export default function LoginPage() {
         tokenType: 'Bearer',
         authState: { email: formData.email}
       });
-
-      navigate('/');
 
     } catch(err) {
       console.error(err);

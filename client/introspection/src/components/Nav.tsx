@@ -1,11 +1,13 @@
 import { Button, Select, useId } from "@fluentui/react-components";
+import { useIsAuthenticated, useSignOut } from "react-auth-kit";
 import { Link } from "react-router-dom";
 
 import styles from './Nav.module.css';
 
 export function Nav({ height }: { height: number }) {
-
-  let selectId = useId();
+  const isAuthenticated = useIsAuthenticated();
+  const signout = useSignOut();
+  const selectId = useId();
 
   return (
     <div style={{
@@ -27,9 +29,14 @@ export function Nav({ height }: { height: number }) {
           <option>clang</option>
           <option>gcc</option>
         </Select>
-        <Link className={styles.link} to={`/login`}>
-          <Button className={styles.button}>Login</Button>
-        </Link>
+        { isAuthenticated() ? (
+            <Button className={styles.button} onClick={signout}>Logout</Button>
+          ) : (
+            <Link className={styles.link} to={`/login`}>
+              <Button className={styles.button}>Login</Button>
+            </Link>
+          )
+        }
       </div>
     </div>
   );
