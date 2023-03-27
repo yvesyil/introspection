@@ -2,23 +2,17 @@ import { Button, Select, useId } from "@fluentui/react-components";
 import { useEffect, useState } from "react";
 import { useIsAuthenticated, useSignOut } from "react-auth-kit";
 import { Link } from "react-router-dom";
-import { getCompilers } from "../api-calls/compilers";
+import { CompilerObject, getCompilers } from "../api-calls/compiler-service";
 
 import styles from './TopBar.module.css';
 
-type Compiler = {
-  id: number,
-  name: string,
-  version: string,
-  languages: number[]
-}
 
 export default function TopBar({ height }: { height: number }) {
   const isAuthenticated = useIsAuthenticated();
   const signout = useSignOut();
   const selectId = useId();
 
-  const [compilers, setCompilers] = useState([]);
+  const [compilers, setCompilers] = useState([] as CompilerObject[]);
 
   const updateCompilers = async () => {
     setCompilers(await getCompilers());
@@ -52,7 +46,7 @@ export default function TopBar({ height }: { height: number }) {
         <label htmlFor={selectId}>Compiler</label>
         <Select id={selectId}>
           {
-            compilers.map((compiler: Compiler, i) => <option key={i}>{compiler.name} {compiler.version}</option>)
+            compilers.map((compiler: CompilerObject, i) => <option key={i}>{compiler.name} {compiler.version}</option>)
           }
         </Select>
         { isAuthenticated() ? (

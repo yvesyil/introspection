@@ -12,7 +12,7 @@ export class RequestService {
     } as Headers; 
   }
 
-  async get(endpoint: string, headers?: Headers) {
+  async get(endpoint: string, headers?: Partial<Headers>) {
     const res = await fetch(this.baseUrl + endpoint, {
       headers: {
         ...this.headers,
@@ -22,7 +22,7 @@ export class RequestService {
     return res.json();
   }
 
-  async post(endpoint: string, body: BodyInit, headers?: Headers) {
+  async post(endpoint: string, body: BodyInit, headers?: Partial<Headers>) {
     const res = await fetch(this.baseUrl + endpoint, {
       headers: {
         ...this.headers,
@@ -34,7 +34,7 @@ export class RequestService {
     return res.json();
   }
 
-  async delete(endpoint: string, headers?: Headers) {
+  async delete(endpoint: string, headers?: Partial<Headers>) {
     const res = await fetch(this.baseUrl + endpoint, {
       headers: {
         ...this.headers,

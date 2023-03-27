@@ -2,6 +2,7 @@ import { Button, Card, Input, Label, Title1, useId } from '@fluentui/react-compo
 import { FormEvent, useEffect, useState } from 'react';
 import {useIsAuthenticated, useSignIn} from 'react-auth-kit';
 import { useNavigate } from 'react-router-dom';
+import { login, UserCredentialsObject } from '../api-calls/auth-service';
 
 import styles from './LoginPage.module.css';
 
@@ -13,10 +14,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
 
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  const [formData, setFormData] = useState({} as UserCredentialsObject);
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -36,14 +34,7 @@ export default function LoginPage() {
     event.preventDefault();
     // TODO fix hardcoded base url
     try {
-      const data = await fetch('http://127.0.0.1:3000/api/login', { 
-        headers: {
-          "Content-Type": "application/json"
-        },
-        method: 'POST', 
-        body: JSON.stringify(formData)
-      });
-      const res = await data.json();
+      const res = await login(formData);
 
       // TODO handle login errors
       if (res.error) {
@@ -54,7 +45,7 @@ export default function LoginPage() {
         token: res.token,
         expiresIn: 3600,
         tokenType: 'Bearer',
-        authState: { email: formData.email}
+        authState: { id: res.id, email: res.email }
       });
 
     } catch(err) {
