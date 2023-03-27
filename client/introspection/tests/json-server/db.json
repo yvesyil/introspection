@@ -3,7 +3,7 @@
     {
       "id": 0,
       "name": "clang",
-      "version": "x.x.x",
+      "version": "15.0.7",
       "languages": [
         0
       ]
@@ -11,7 +11,7 @@
     {
       "id": 1,
       "name": "gcc",
-      "version": "x.x.x",
+      "version": "11.3",
       "languages": [
         0
       ]

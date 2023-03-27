@@ -1,13 +1,38 @@
 import { Button, Select, useId } from "@fluentui/react-components";
+import { useEffect, useState } from "react";
 import { useIsAuthenticated, useSignOut } from "react-auth-kit";
 import { Link } from "react-router-dom";
+import { getCompilers } from "../api-calls/compilers";
 
-import styles from './Nav.module.css';
+import styles from './TopBar.module.css';
 
-export function Nav({ height }: { height: number }) {
+type Compiler = {
+  id: number,
+  name: string,
+  version: string,
+  languages: number[]
+}
+
+export default function TopBar({ height }: { height: number }) {
   const isAuthenticated = useIsAuthenticated();
   const signout = useSignOut();
   const selectId = useId();
+
+  const [compilers, setCompilers] = useState([]);
+
+  const updateCompilers = async () => {
+    setCompilers(await getCompilers());
+  }
+
+  const handleCompile = () => {
+    // TODO get compiler info
+    // TODO make api call to /compile
+    // TODO update the result
+  }
+
+  useEffect(() => {
+    updateCompilers();
+  }, []);
 
   return (
     <div style={{
@@ -17,7 +42,7 @@ export function Nav({ height }: { height: number }) {
       height: `${height}px`,
       padding: '0 10px'
     }}>
-      <Button className={styles.button}>Compile</Button>
+      <Button className={styles.button} onClick={handleCompile}>Compile</Button>
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -26,8 +51,9 @@ export function Nav({ height }: { height: number }) {
       }}>
         <label htmlFor={selectId}>Compiler</label>
         <Select id={selectId}>
-          <option>clang</option>
-          <option>gcc</option>
+          {
+            compilers.map((compiler: Compiler, i) => <option key={i}>{compiler.name} {compiler.version}</option>)
+          }
         </Select>
         { isAuthenticated() ? (
             <Button className={styles.button} onClick={signout}>Logout</Button>

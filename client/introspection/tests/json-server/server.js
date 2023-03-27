@@ -12,6 +12,8 @@ const middlewares = jsonServer.defaults();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const file = path.join(__dirname, 'db.json');
 
+const router = jsonServer.router(file);
+
 const adapter = new JSONFile(file);
 const db = new Low(adapter);
 
@@ -51,6 +53,11 @@ server.post('/api/login', async (req, res) => {
   }
 });
 
+server.use('/api/compile', async (req, res) => {
+  // TODO fake compilation handling
+});
+
+server.use('/api', router);
 server.listen(3000, () => {
   console.log('JSON Server is running');
 });
