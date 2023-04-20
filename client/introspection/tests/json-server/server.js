@@ -91,9 +91,26 @@ server.post('/api/files/:id', async (req, res) => {
 
   } catch (err) {
     console.error(err);
+    return res.status(500).json({ err });
   }
 
   await db.write();
+  return res.sendStatus(269);
+});
+
+server.get('/api/files/:id', async (req, res) => {
+  await db.read(); 
+  const id = Number(req.params.id);
+
+  let file;
+  try {
+    file = db.data.files.filter(obj => obj.id === id);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ err });
+  }
+
+  return res.json(file);
 });
 
 server.post('/api/compile', async (req, res) => {

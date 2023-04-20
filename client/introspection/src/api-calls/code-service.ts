@@ -13,10 +13,10 @@ export type CodeSnippetObject = {
 
 export async function getCodeSnippetsOfUser(userId: number, authorization: string): Promise<CodeSnippetObject[]> {
   const headers = { Authorization: authorization } as Partial<Headers>;
-  return await requester.get(`/api/files?userId=${userId}`, headers);
+  return await requester.get(`/api/files/${userId}`, headers);
 }
 
-export async function saveCodeSnippet(snippet: CodeSnippetObject, authorization: string) {
+export async function postCodeSnippet(snippet: CodeSnippetObject, authorization: string) {
   const headers = { Authorization: authorization } as Partial<Headers>;
   return await requester.post(`/api/files/${snippet.id}`, JSON.stringify(snippet), headers);
 }

@@ -1,8 +1,8 @@
 import Editor, { useMonaco } from "@monaco-editor/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import GithubDarkTheme from '../assets/github-dark.json';
 import { editor } from "monaco-editor";
-import { CodeSnippetObject, getCodeSnippetsOfUser, saveCodeSnippet } from "../api-calls/code-service";
+import { CodeSnippetObject, getCodeSnippetsOfUser, postCodeSnippet } from "../api-calls/code-service";
 import { debounce } from "../utils";
 import { useAuthUser, useIsAuthenticated, useAuthHeader } from "react-auth-kit";
 
@@ -17,21 +17,19 @@ export default function EditorBody({ height }: { height: number }) {
   const auth = useAuthUser();
   const authHeader = useAuthHeader();
 
-
   const handleCodeChange = (value: string | undefined) => {
     const changedSnippet: CodeSnippetObject = {
       ...codeSnippet,
       content: value as string,
     };
     setCodeSnippet(changedSnippet);
-    if (isAuthenticated()) {
-      (debounce(() => saveCodeSnippet(changedSnippet, authHeader()), 1000))();
-    }
   };
 
   const loadCodeSnippet = async () => {
     setCodeSnippet((await getCodeSnippetsOfUser(auth()!.id, authHeader()))[0]);
   };
+
+  const saveCodeSnippet = useCallback(debounce(postCodeSnippet, 3000), []);
 
   useEffect(() => {
     if (monaco) {
@@ -45,6 +43,12 @@ export default function EditorBody({ height }: { height: number }) {
       loadCodeSnippet();
     }
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      saveCodeSnippet(codeSnippet, authHeader());
+    }
+  }, [codeSnippet]);
 
   return (
     <div style={{
