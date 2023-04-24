@@ -5,9 +5,10 @@ import { Link } from "react-router-dom";
 import { CompilerObject, getCompilers } from "../api-calls/compiler-service";
 
 import styles from './TopBar.module.css';
+import WindowConfig from "../interfaces/window";
 
 
-export default function TopBar({ height }: { height: number }) {
+export default function TopBar({ config }: { config: WindowConfig }) {
   const isAuthenticated = useIsAuthenticated();
   const signout = useSignOut();
   const selectId = useId();
@@ -33,8 +34,10 @@ export default function TopBar({ height }: { height: number }) {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      height: `${height}px`,
-      padding: '0 10px'
+      height: `${config.height}px`,
+      width: `${config.width}px`,
+      boxSizing: 'border-box',
+      padding: '0 20px',
     }}>
       <Button className={styles.button} onClick={handleCompile}>Compile</Button>
       <div style={{

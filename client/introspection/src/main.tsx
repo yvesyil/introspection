@@ -5,6 +5,7 @@ import App from './App';
 import { AuthProvider } from 'react-auth-kit';
 
 import './index.css';
+import ViewportProvider from './context/ViewportProvider';
 
 const theme: Theme = {
   ...teamsDarkTheme,
@@ -19,7 +20,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     cookieDomain={window.location.hostname}
     cookieSecure={window.location.protocol === "https:"}>
     <FluentProvider theme={theme}>
-      <App />
+      <ViewportProvider>
+        <App />
+      </ViewportProvider>
     </FluentProvider>
   </AuthProvider>
 );

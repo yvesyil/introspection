@@ -5,8 +5,9 @@ import { editor } from "monaco-editor";
 import { CodeSnippetObject, getCodeSnippetsOfUser, postCodeSnippet } from "../api-calls/code-service";
 import { debounce } from "../utils";
 import { useAuthUser, useIsAuthenticated, useAuthHeader } from "react-auth-kit";
+import WindowConfig from "../interfaces/window";
 
-export default function EditorBody({ height }: { height: number }) {
+export default function EditorBody({ config }: { config: WindowConfig }) {
 
   const editorFont = "'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New', monospace";
   const defaultCode = `// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf("Hello, World!");\n\treturn 0;\n}\n`;
@@ -53,10 +54,12 @@ export default function EditorBody({ height }: { height: number }) {
   return (
     <div style={{
       display: 'flex',
-      height: `${height}px`,
+      height: `${config.height}px`,
+      width: `${config.width}px`,
+      boxSizing: 'border-box',
     }}>
       <Editor
-        width="50vw"
+        width={`${config.width / 2}px`}
         defaultLanguage="c"
         value={codeSnippet.content}
         theme="vs-dark"
@@ -66,7 +69,7 @@ export default function EditorBody({ height }: { height: number }) {
         onChange={handleCodeChange}
       />
       <Editor
-        width="50vw"
+        width={`${config.width / 2}px`}
         defaultLanguage="plaintext"
         theme="vs-dark"
         options={{
