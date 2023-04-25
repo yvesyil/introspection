@@ -2,14 +2,16 @@ import Editor, { useMonaco } from "@monaco-editor/react";
 import { useCallback, useEffect, useState } from "react";
 import GithubDarkTheme from '../assets/github-dark.json';
 import { editor } from "monaco-editor";
-import { FileObject, getFile, getFilesOfUser, postFile } from "../api-calls/file-service";
+import { FileObject, getFile, getFilesOfUser, putFile } from "../api-calls/file-service";
 import { debounce } from "../utils";
 import { useAuthUser, useIsAuthenticated, useAuthHeader } from "react-auth-kit";
 import WindowConfig from "../interfaces/window";
+import { OutputObject } from "../api-calls/compiler-service";
 
-export default function EditorBody({ config, openFile, setOpenFile }: {
+export default function EditorBody({ config, openFile, output, setOpenFile }: {
     config: WindowConfig,
     openFile: FileObject,
+    output: OutputObject
     setOpenFile: (file: FileObject) => void,
   }) {
 
@@ -23,7 +25,7 @@ export default function EditorBody({ config, openFile, setOpenFile }: {
   const auth = useAuthUser();
   const authHeader = useAuthHeader();
 
-  const saveFile = useCallback(debounce(postFile, 2000), []);
+  const saveFile = useCallback(debounce(putFile, 2000), []);
 
   const handleFileChange = (value: string | undefined) => {
     if (bufferedFile === openFile) {
@@ -48,8 +50,6 @@ export default function EditorBody({ config, openFile, setOpenFile }: {
     }
   };
 
-
-
   useEffect(() => {
     if (monaco) {
       monaco.editor.defineTheme('github-dark', GithubDarkTheme as editor.IStandaloneThemeData);
@@ -57,15 +57,14 @@ export default function EditorBody({ config, openFile, setOpenFile }: {
     }
   }, [monaco]);
 
-  /*
-  useEffect(() => {
-    
-  }, []);
-  */
 
   useEffect(() => {
     setBufferedFile(openFile);
   }, [openFile]);
+
+  useEffect(() => {
+
+  });
 
   return (
     <div style={{
@@ -88,8 +87,10 @@ export default function EditorBody({ config, openFile, setOpenFile }: {
         width={`${config.width / 2}px`}
         defaultLanguage="plaintext"
         theme="vs-dark"
+        value={output.error ? output.error : output.content}
         options={{
           fontFamily: editorFont,
+          readOnly: true,
         }}
       />
     </div>

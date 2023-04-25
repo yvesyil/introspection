@@ -5,6 +5,7 @@ import cors from 'cors';
 import { fileURLToPath } from 'url';
 import { Low } from 'lowdb';
 import { JSONFile } from 'lowdb/node';
+import { execSync } from 'child_process';
 
 const server = jsonServer.create();
 const middlewares = jsonServer.defaults();
@@ -73,7 +74,7 @@ server.post('/api/login', async (req, res) => {
   }
 });
 
-server.post('/api/files/:id', async (req, res) => {
+server.put('/api/files/:id', async (req, res) => {
   await db.read();
   const id = Number(req.params.id);
 
@@ -117,6 +118,21 @@ server.get('/api/files/:id', async (req, res) => {
 
 server.post('/api/compile', async (req, res) => {
   // TODO fake compilation handling
+  const file = req.body;
+  const compilerOptions = '-S -O0 -fno-asynchronous-unwind-tables -fverbose-asm -masm=intel';
+
+  let output = '';
+  let error = null;
+  try {
+    output = execSync(`echo ${JSON.stringify(file.content)} | clang ${compilerOptions} -x c - -o -`).toString();
+  } catch (err) {
+    error = err.toString();
+  }
+
+  return res.json({
+    error: error,
+    content: output,
+  });
 });
 
 server.use('/api', router);

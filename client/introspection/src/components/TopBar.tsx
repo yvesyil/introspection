@@ -1,15 +1,22 @@
 import { Button, Select, useId } from "@fluentui/react-components";
 import { useEffect, useState } from "react";
-import { useIsAuthenticated, useSignOut } from "react-auth-kit";
+import { useAuthHeader, useIsAuthenticated, useSignOut } from "react-auth-kit";
 import { Link } from "react-router-dom";
-import { CompilerObject, getCompilers } from "../api-calls/compiler-service";
+import { CompilerObject, OutputObject, compileFile, getCompilers } from "../api-calls/compiler-service";
 
 import styles from './TopBar.module.css';
 import WindowConfig from "../interfaces/window";
+import { FileObject } from "../api-calls/file-service";
 
 
-export default function TopBar({ config }: { config: WindowConfig }) {
+export default function TopBar({ config, openFile, setOutput }: {
+   config: WindowConfig,
+   openFile: FileObject,
+   setOutput: (output: OutputObject) => void
+  }) {
+
   const isAuthenticated = useIsAuthenticated();
+  const authHeader = useAuthHeader();
   const signout = useSignOut();
   const selectId = useId();
 
@@ -19,10 +26,12 @@ export default function TopBar({ config }: { config: WindowConfig }) {
     setCompilers(await getCompilers());
   }
 
-  const handleCompile = () => {
+  const handleCompile = async () => {
     // TODO get compiler info
     // TODO make api call to /compile
+    const output = await compileFile(openFile, authHeader());
     // TODO update the result
+    setOutput(output);
   }
 
   useEffect(() => {

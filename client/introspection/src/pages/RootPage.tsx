@@ -6,13 +6,14 @@ import FileExplorer from "../components/FileTree";
 import { useIsAuthenticated } from "react-auth-kit";
 import useViewport from "../hooks/viewport";
 import { FileObject } from "../api-calls/file-service";
+import { OutputObject } from "../api-calls/compiler-service";
 
 
-//export default function RootPage({ config }: { config: WindowConfig }) {
 export default function RootPage() {
   const {width, height} = useViewport();
   const isAuthenticated = useIsAuthenticated();
   const [ openFile, setOpenFile ] = useState({} as FileObject);
+  const [ output, setOutput ] = useState({} as OutputObject);
 
   const topBarConfig = {
     width: width,
@@ -36,17 +37,31 @@ export default function RootPage() {
 
   return (
     <>
-      <TopBar config={topBarConfig} />
+      <TopBar config={topBarConfig} openFile={openFile} setOutput={setOutput} />
       { 
         isAuthenticated() ? (
           <div style={{
             display: 'flex'
           }}>
-            <FileExplorer config={fileExplorerConfig} openFile={openFile} setOpenFile={setOpenFile} />
-            <EditorBody config={editorBodyConfig} openFile={openFile} setOpenFile={setOpenFile} />
+            <FileExplorer 
+              config={fileExplorerConfig} 
+              openFile={openFile} 
+              setOpenFile={setOpenFile} 
+              />
+            <EditorBody 
+              config={editorBodyConfig} 
+              openFile={openFile} 
+              output={output} 
+              setOpenFile={setOpenFile} 
+              />
           </div>
         ) : (
-          <EditorBody config={editorBodyConfig} openFile={openFile} setOpenFile={setOpenFile} />
+          <EditorBody 
+            config={editorBodyConfig}
+            openFile={openFile} 
+            output={output} 
+            setOpenFile={setOpenFile} 
+            />
         )
       }
     </>

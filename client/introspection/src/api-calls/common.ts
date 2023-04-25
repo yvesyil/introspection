@@ -34,6 +34,18 @@ export class RequestService {
     return res.json();
   }
 
+  async put(endpoint: string, body: BodyInit, headers?: Partial<Headers>) {
+    const res = await fetch(this.baseUrl + endpoint, {
+      headers: {
+        ...this.headers,
+        ...headers
+      },
+      method: 'PUT',
+      body
+    })
+    return res.json();
+  }
+
   async delete(endpoint: string, headers?: Partial<Headers>) {
     const res = await fetch(this.baseUrl + endpoint, {
       headers: {

@@ -52,7 +52,7 @@ export default function FileExplorer({ config, openFile, setOpenFile }: {
 
   const buildTree = (dirs: DirectoryObject[]) => {
     return dirs.map((dir, id) => (
-      <TreeItem actions={<DirectoryActions />}>
+      <TreeItem key={id} actions={<DirectoryActions />}>
         <TreeItemLayout id={`directory: ${dir.id}`}>{dir.name}</TreeItemLayout>
         {
           dir.tree.directories || dir.tree.files ? (
@@ -67,7 +67,7 @@ export default function FileExplorer({ config, openFile, setOpenFile }: {
               {
                 dir.tree.files ? (
                   dir.tree.files.map((file, id) => (
-                    <TreeItem actions={<FileActions />}>
+                    <TreeItem key={id} actions={<FileActions />}>
                       <TreeItemLayout id={`file: ${file.id}`} onClick={async () => loadFile(file.id)}>{file.name}</TreeItemLayout>
                     </TreeItem>
                   ))

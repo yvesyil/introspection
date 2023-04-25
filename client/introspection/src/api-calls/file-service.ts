@@ -93,7 +93,7 @@ export async function getFileTreeOfUser(userId: number, authorization: string): 
   return directories;
 }
 
-export async function postFile(file: FileObject, authorization: string) {
+export async function putFile(file: FileObject, authorization: string) {
   const headers = { Authorization: authorization } as Partial<Headers>;
-  return requester.post(`/api/files/${file.id}`, JSON.stringify(file), headers);
+  return requester.put(`/api/files/${file.id}`, JSON.stringify(file), headers);
 }
