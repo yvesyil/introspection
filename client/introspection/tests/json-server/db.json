@@ -94,7 +94,7 @@
       "userId": 0,
       "name": "main.c",
       "type": "c-source",
-      "content": "// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf(\"We will see this right?\");\n\treturn 0;\n}\n",
+      "content": "// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf(\"Hello\");\n\treturn 0;\n}\n",
       "directoryId": 0
     },
     {
@@ -102,7 +102,7 @@
       "userId": 0,
       "name": "temp.txt",
       "type": "plaintext",
-      "content": "testt",
+      "content": "test",
       "directoryId": 1
     }
   ]
