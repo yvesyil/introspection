@@ -2,7 +2,7 @@ import Editor, { useMonaco } from "@monaco-editor/react";
 import { useCallback, useEffect, useState } from "react";
 import GithubDarkTheme from '../assets/github-dark.json';
 import { editor } from "monaco-editor";
-import { CodeSnippetObject, getCodeSnippetsOfUser, postCodeSnippet } from "../api-calls/code-service";
+import { FileObject, getFilesOfUser, postFile } from "../api-calls/code-service";
 import { debounce } from "../utils";
 import { useAuthUser, useIsAuthenticated, useAuthHeader } from "react-auth-kit";
 import WindowConfig from "../interfaces/window";
@@ -12,14 +12,14 @@ export default function EditorBody({ config }: { config: WindowConfig }) {
   const editorFont = "'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New', monospace";
   const defaultCode = `// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf("Hello, World!");\n\treturn 0;\n}\n`;
 
-  const [codeSnippet, setCodeSnippet] = useState({content: defaultCode} as CodeSnippetObject);
+  const [codeSnippet, setCodeSnippet] = useState({content: defaultCode} as FileObject);
   const monaco = useMonaco();
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
   const authHeader = useAuthHeader();
 
   const handleCodeChange = (value: string | undefined) => {
-    const changedSnippet: CodeSnippetObject = {
+    const changedSnippet: FileObject = {
       ...codeSnippet,
       content: value as string,
     };
@@ -27,10 +27,10 @@ export default function EditorBody({ config }: { config: WindowConfig }) {
   };
 
   const loadCodeSnippet = async () => {
-    setCodeSnippet((await getCodeSnippetsOfUser(auth()!.id, authHeader()))[0]);
+    setCodeSnippet((await getFilesOfUser(auth()!.id, authHeader()))[0]);
   };
 
-  const saveCodeSnippet = useCallback(debounce(postCodeSnippet, 3000), []);
+  const saveCodeSnippet = useCallback(debounce(postFile, 3000), []);
 
   useEffect(() => {
     if (monaco) {
@@ -39,6 +39,7 @@ export default function EditorBody({ config }: { config: WindowConfig }) {
     }
   }, [monaco]);
 
+  /*
   useEffect(() => {
     if (isAuthenticated()) {
       loadCodeSnippet();
@@ -50,6 +51,7 @@ export default function EditorBody({ config }: { config: WindowConfig }) {
       saveCodeSnippet(codeSnippet, authHeader());
     }
   }, [codeSnippet]);
+  */
 
   return (
     <div style={{

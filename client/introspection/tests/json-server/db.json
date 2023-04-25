@@ -40,44 +40,70 @@
       "password": "root"
     }
   ],
-  "environments": [
-    {
-      "id": 0,
-      "userId": 0,
-      "directories": [
-        0
-      ],
-      "files": []
-    }
-  ],
   "directories": [
     {
       "id": 0,
+      "userId": 0,
       "name": "src",
-      "environmentId": 0,
-      "files": [
-        0
-      ]
+      "root": true,
+      "treeOfIds": {
+        "fileIds": [
+          0
+        ],
+        "directoryIds": [
+          1
+        ]
+      },
+      "directoryId": null
+    },
+    {
+      "id": 1,
+      "userId": 0,
+      "name": "temp",
+      "root": false,
+      "treeOfIds": {
+        "fileIds": [
+          1
+        ],
+        "directoryIds": []
+      },
+      "directoryId": 0
     }
   ],
-  "filess": [
+  "files_template": [
     {
       "id": 0,
+      "userId": 0,
       "name": "main.c",
       "type": "c-source",
       "content": "// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf(\"Hello, World!\");\n\treturn 0;\n}\n",
-      "directoryId": 0,
-      "userId": 0
+      "directoryId": 0
+    },
+    {
+      "id": 1,
+      "userId": 0,
+      "name": "temp.txt",
+      "type": "plaintext",
+      "content": "testt",
+      "directoryId": 1
     }
   ],
   "files": [
     {
       "id": 0,
+      "userId": 0,
       "name": "main.c",
       "type": "c-source",
       "content": "// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf(\"We will see this right?\");\n\treturn 0;\n}\n",
-      "directoryId": 0,
-      "userId": 0
+      "directoryId": 0
+    },
+    {
+      "id": 1,
+      "userId": 0,
+      "name": "temp.txt",
+      "type": "plaintext",
+      "content": "testt",
+      "directoryId": 1
     }
   ]
 }

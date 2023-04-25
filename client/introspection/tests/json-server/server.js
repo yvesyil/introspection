@@ -24,7 +24,9 @@ server.use(jsonServer.bodyParser);
 
 const publicRoutes = new Set([
   '/login', 
-  '/compilers'
+  '/compilers',
+  '/directories',
+  '/files',
 ]);
 
 // auth middleware
@@ -104,7 +106,7 @@ server.get('/api/files/:id', async (req, res) => {
 
   let file;
   try {
-    file = db.data.files.filter(obj => obj.id === id);
+    [ file ] = db.data.files.filter(obj => obj.id === id);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ err });
@@ -118,6 +120,8 @@ server.post('/api/compile', async (req, res) => {
 });
 
 server.use('/api', router);
-server.listen(3000, () => {
-  console.log('JSON Server is running');
+
+const port = 3000;
+server.listen(port, () => {
+  console.log(`JSON Server is running on port ${port}`);
 });
