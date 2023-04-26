@@ -97,3 +97,28 @@ export async function putFile(file: FileObject, authorization: string) {
   const headers = { Authorization: authorization } as Partial<Headers>;
   return requester.put(`/api/files/${file.id}`, JSON.stringify(file), headers);
 }
+
+export async function putDirectory(directory: DirectoryObject, authorization: string) {
+  const headers = { Authorization: authorization } as Partial<Headers>;
+  return requester.put(`/api/directories/${directory.id}`, JSON.stringify(directory), headers);
+}
+
+export async function postFile(file: Partial<FileObject>, authorization: string) {
+  const headers = { Authorization: authorization } as Partial<Headers>;
+  return requester.post(`/api/files`, JSON.stringify(file), headers);
+}
+
+export async function postDirectory(directory: Partial<DirectoryObject>, authorization: string) {
+  const headers = { Authorization: authorization } as Partial<Headers>;
+  return requester.post(`/api/directories`, JSON.stringify(directory), headers);
+}
+
+export async function deleteFile(fileId: number, authorization: string) {
+  const headers = { Authorization: authorization } as Partial<Headers>;
+  return requester.delete(`/api/files/${fileId}`, headers);
+}
+
+export async function deleteDirectory(directoryId: number, authorization: string) {
+  const headers = { Authorization: authorization } as Partial<Headers>;
+  return requester.delete(`/api/directories/${directoryId}`, headers);
+}

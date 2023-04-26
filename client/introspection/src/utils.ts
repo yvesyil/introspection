@@ -18,3 +18,7 @@ export function vw(percent: number) {
   const w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
   return (percent * w) / 100;
 }
+
+export function isEmpty(obj: Object) {
+  return Object.keys(obj).length === 0;
+}

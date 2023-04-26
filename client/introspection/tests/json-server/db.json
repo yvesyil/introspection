@@ -94,7 +94,7 @@
       "userId": 0,
       "name": "main.c",
       "type": "c-source",
-      "content": "// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf(\"Hello, World?\");\n\treturn 0;\n}\n",
+      "content": "// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf(\"What\");\n\treturn 0;\n}\n",
       "directoryId": 0
     },
     {
