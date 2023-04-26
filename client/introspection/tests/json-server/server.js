@@ -13,10 +13,10 @@ const middlewares = jsonServer.defaults();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const file = path.join(__dirname, 'db.json');
 
-const router = jsonServer.router(file);
+let router = jsonServer.router(file);
 
-const adapter = new JSONFile(file);
-const db = new Low(adapter);
+let adapter = new JSONFile(file);
+let db = new Low(adapter);
 
 
 server.use(cors());
@@ -26,9 +26,12 @@ server.use(jsonServer.bodyParser);
 const publicRoutes = new Set([
   '/login', 
   '/compilers',
-  '/directories',
-  '/files',
 ]);
+
+server.use('/api', async (req, res, next) => {
+  router.db.read();
+  return next();
+});
 
 // auth middleware
 server.use('/api', (req, res, next) => {
@@ -45,6 +48,7 @@ server.use('/api', (req, res, next) => {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 })
+
 
 server.post('/api/login', async (req, res) => {
   await db.read();
@@ -134,6 +138,43 @@ server.post('/api/compile', async (req, res) => {
     content: output,
   });
 });
+
+server.delete('/api/files/:id', async (req, res) => {
+  await db.read(); 
+  const id = Number(req.params.id);
+
+  try {
+    const newfiles = db.data.files.filter(obj => obj.id !== id);
+
+    db.data.files = newfiles;
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ err });
+  }
+
+  await db.write();
+  return res.status(200).json({ status: 'removed item' });
+});
+
+server.delete('/api/directories/:id', async (req, res) => {
+  await db.read(); 
+  const id = Number(req.params.id);
+
+  try {
+    const newdirectories = db.data.directories.filter(obj => obj.id !== id);
+    const newfiles = db.data.files.filter(obj => obj.directoryId !== id);
+
+    db.data.directories = newdirectories;
+    db.data.files = newfiles;
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ err });
+  }
+
+  await db.write();
+  return res.status(200).json({ status: 'removed item' });
+});
+
 
 server.use('/api', router);
 

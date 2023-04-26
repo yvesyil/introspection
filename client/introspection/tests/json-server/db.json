@@ -68,6 +68,17 @@
         "directoryIds": []
       },
       "directoryId": 0
+    },
+    {
+      "userId": 0,
+      "name": "try",
+      "root": false,
+      "treeOfIds": {
+        "fileIds": [],
+        "directoryIds": []
+      },
+      "directoryId": 0,
+      "id": 3
     }
   ],
   "files_template": [
@@ -104,6 +115,14 @@
       "type": "plaintext",
       "content": "test",
       "directoryId": 1
+    },
+    {
+      "userId": 0,
+      "content": "",
+      "name": "test.c",
+      "type": "text",
+      "directoryId": 0,
+      "id": 2
     }
   ]
 }

@@ -7,11 +7,17 @@ import { Button, Input, tokens } from '@fluentui/react-components';
 import WindowConfig from "../interfaces/window";
 import { ChangeEvent, KeyboardEventHandler, useEffect, useState } from "react";
 import { useAuthHeader, useAuthUser, useIsAuthenticated } from "react-auth-kit";
-import { DirectoryObject, FileObject, deleteDirectory, getFile, getFileTreeOfUser, postDirectory, postFile } from "../api-calls/file-service";
+import { DirectoryObject, FileObject, deleteDirectory, deleteFile, getFile, getFileTreeOfUser, getFileTreeOfUser2, postDirectory, postFile } from "../api-calls/file-service";
 import { DocumentAdd24Regular, FolderAdd24Regular, Delete24Regular } from "@fluentui/react-icons";
 import { isEmpty } from "../utils";
 
-function DirectoryActions({ id, }: { id: number }) {
+
+function DirectoryActions({ directory, setNewDirectory, setNewFile, loadFileTree }: { 
+    directory: DirectoryObject,
+    setNewDirectory: any,
+    setNewFile: any,
+    loadFileTree: () => void,
+  }) {
   const auth = useAuthUser();
   const authHeader = useAuthHeader();
 
@@ -21,44 +27,53 @@ function DirectoryActions({ id, }: { id: number }) {
       content: '',
       name: '',
       type: 'text',
-      directoryId: id,
+      directoryId: directory.id,
     };
 
-    //await postFile(file, authHeader());
+    setNewFile(file);
   };
 
   const addNewDirectory = async () => {
     let dir: Partial<DirectoryObject> = {
       userId: auth()!.id,
       name: '',
+      root: false,
       treeOfIds: {
         fileIds: [],
         directoryIds: [],
       },
-      directoryId: id,
+      directoryId: directory.id,
     };
 
-    //await postDirectory(dir, authHeader());
+    setNewDirectory(dir);
   };
 
   const removeThisDirectory = async () => {
-    await deleteDirectory(id, authHeader());
+    await deleteDirectory(directory.id, authHeader());
+    loadFileTree();
   };
 
   return (
     <>
       <Button aria-label="New Directory" onClick={addNewDirectory} appearance="subtle" icon={<FolderAdd24Regular />} />
       <Button aria-label="New File" onClick={addNewFile} appearance="subtle" icon={<DocumentAdd24Regular />} />
-      <Button aria-label="Delete" onClick={removeThisDirectory} appearance="subtle" icon={<Delete24Regular />} />
+      {
+        !directory.root ? (
+          <Button aria-label="Delete" onClick={removeThisDirectory} appearance="subtle" icon={<Delete24Regular />} />
+        ) : (
+          <></>
+        )
+      }
     </>
   );
 }
 
-function FileActions({ id }: { id: number }) {
+function FileActions({ id, loadFileTree }: { id: number, loadFileTree: () => void }) {
   const authHeader = useAuthHeader();
 
   const removeThisFile = async () => {
-    await deleteDirectory(id, authHeader());
+    await deleteFile(id, authHeader());
+    loadFileTree();
   };
 
   return (
@@ -79,9 +94,11 @@ export default function FileExplorer({ config, openFile, setOpenFile }: {
   const authHeader = useAuthHeader();
 
   const [ fileTree, setFileTree ] = useState([] as DirectoryObject[]);
+  const [ newDirectory, setNewDirectory ] = useState({} as DirectoryObject);
+  const [ newFile, setNewFile ] = useState({} as FileObject);
 
   const loadFileTree = async () => {
-    setFileTree(await getFileTreeOfUser(auth()!.id, authHeader()));
+    setFileTree(await getFileTreeOfUser2(auth()!.id, authHeader()));
   };
 
   const loadFile = async (id: number) => {
@@ -91,11 +108,48 @@ export default function FileExplorer({ config, openFile, setOpenFile }: {
 
   const buildTree = (dirs: DirectoryObject[]) => {
     return dirs.map((dir, id) => (
-      <TreeItem key={id} actions={<DirectoryActions id={dir.id} />}>
+      <TreeItem key={id} actions={<DirectoryActions directory={dir} setNewDirectory={setNewDirectory} setNewFile={setNewFile} loadFileTree={() => loadFileTree()} />}>
         <TreeItemLayout id={`directory: ${dir.id}`}>{dir.name}</TreeItemLayout>
         {
-          dir.tree.directories || dir.tree.files ? (
+          dir.tree.directories || dir.tree.files || !isEmpty(newDirectory) || !isEmpty(newFile) ? (
             <Tree>
+              {
+                !isEmpty(newDirectory) && newDirectory.directoryId === dir.id ? (
+                  <Input
+                    placeholder="enter name!"
+                    aria-label="inline" 
+                    onChange={(ev) => {
+                      setNewDirectory({ ...newDirectory, name: ev.target.value });
+                    }}
+                    value={newDirectory.name}
+                    onKeyDown={async (ev) => {
+                      if (ev.key === 'Enter') {
+                        await postDirectory(newDirectory, authHeader());
+                        setNewDirectory({} as DirectoryObject);
+                        loadFileTree();
+                      }
+                    }}
+                  /> 
+                ) : !isEmpty(newFile) && newFile.directoryId === dir.id ? (
+                  <Input 
+                    placeholder="enter name" 
+                    aria-label="inline" 
+                    onChange={(ev) => {
+                      setNewFile({ ...newFile, name: ev.target.value });
+                    }}
+                    value={newFile.name}
+                    onKeyDown={async (ev) => {
+                      if (ev.key === 'Enter') {
+                        await postFile(newFile, authHeader());
+                        setNewFile({} as FileObject);
+                        loadFileTree();
+                      }
+                    }}
+                  />
+                ) : (
+                  <></>
+                )
+              }
               {
                 dir.tree.directories ? (
                   buildTree(dir.tree.directories)
@@ -106,7 +160,7 @@ export default function FileExplorer({ config, openFile, setOpenFile }: {
               {
                 dir.tree.files ? (
                   dir.tree.files.map((file, id) => (
-                    <TreeItem key={id} actions={<FileActions id={file.id} />}>
+                    <TreeItem key={id} actions={<FileActions id={file.id} loadFileTree={() => loadFileTree()} />}>
                       <TreeItemLayout id={`file: ${file.id}`} onClick={async () => loadFile(file.id)}>{file.name}</TreeItemLayout>
                     </TreeItem>
                   ))
