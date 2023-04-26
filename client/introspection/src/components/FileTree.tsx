@@ -5,9 +5,9 @@ import {
 } from "@fluentui/react-components/unstable";
 import { Button, Input, tokens } from '@fluentui/react-components';
 import WindowConfig from "../interfaces/window";
-import { ChangeEvent, KeyboardEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthHeader, useAuthUser, useIsAuthenticated } from "react-auth-kit";
-import { DirectoryObject, FileObject, deleteDirectory, deleteFile, getFile, getFileTreeOfUser, getFileTreeOfUser2, postDirectory, postFile } from "../api-calls/file-service";
+import { DirectoryObject, FileObject, deleteDirectory, deleteFile, getFile, getFileTreeOfUser, postDirectory, postFile } from "../api-calls/file-service";
 import { DocumentAdd24Regular, FolderAdd24Regular, Delete24Regular } from "@fluentui/react-icons";
 import { isEmpty } from "../utils";
 
@@ -27,7 +27,7 @@ function DirectoryActions({ directory, setNewDirectory, setNewFile, loadFileTree
       content: '',
       name: '',
       type: 'text',
-      directoryId: directory.id,
+      parentId: directory.id,
     };
 
     setNewFile(file);
@@ -38,11 +38,7 @@ function DirectoryActions({ directory, setNewDirectory, setNewFile, loadFileTree
       userId: auth()!.id,
       name: '',
       root: false,
-      treeOfIds: {
-        fileIds: [],
-        directoryIds: [],
-      },
-      directoryId: directory.id,
+      parentId: directory.id,
     };
 
     setNewDirectory(dir);
@@ -98,7 +94,7 @@ export default function FileExplorer({ config, openFile, setOpenFile }: {
   const [ newFile, setNewFile ] = useState({} as FileObject);
 
   const loadFileTree = async () => {
-    setFileTree(await getFileTreeOfUser2(auth()!.id, authHeader()));
+    setFileTree(await getFileTreeOfUser(auth()!.id, authHeader()));
   };
 
   const loadFile = async (id: number) => {
@@ -114,7 +110,7 @@ export default function FileExplorer({ config, openFile, setOpenFile }: {
           dir.tree.directories || dir.tree.files || !isEmpty(newDirectory) || !isEmpty(newFile) ? (
             <Tree>
               {
-                !isEmpty(newDirectory) && newDirectory.directoryId === dir.id ? (
+                !isEmpty(newDirectory) && newDirectory.parentId === dir.id ? (
                   <Input
                     placeholder="enter name!"
                     aria-label="inline" 
@@ -130,7 +126,7 @@ export default function FileExplorer({ config, openFile, setOpenFile }: {
                       }
                     }}
                   /> 
-                ) : !isEmpty(newFile) && newFile.directoryId === dir.id ? (
+                ) : !isEmpty(newFile) && newFile.parentId === dir.id ? (
                   <Input 
                     placeholder="enter name" 
                     aria-label="inline" 

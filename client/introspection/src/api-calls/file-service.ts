@@ -8,7 +8,7 @@ export type FileObject = {
   name: string,
   type: string,
   content: string,
-  directoryId: number,
+  parentId: number,
 }
 
 type DirectoryTree = {
@@ -21,12 +21,8 @@ export type DirectoryObject = {
   userId: number,
   name: string,
   root: boolean,
-  treeOfIds: {
-    fileIds: number[],
-    directoryIds: number[],
-  },
   tree: DirectoryTree,
-  directoryId: number | null,
+  parentId: number | null,
 }
 
 export async function getFile(fileId: number, authorization: string): Promise<FileObject> {
@@ -36,7 +32,7 @@ export async function getFile(fileId: number, authorization: string): Promise<Fi
 
 export async function getFilesOfDirectory(directoryId: number, authorization: string): Promise<FileObject[]> {
   const headers = { Authorization: authorization } as Partial<Headers>;
-  return requester.get(`/api/files?directoryId=${directoryId}`, headers);
+  return requester.get(`/api/files?parentId=${directoryId}`, headers);
 }
 
 export async function getFilesOfUser(userId: number, authorization: string) {
@@ -56,7 +52,7 @@ export async function getDirectoriesOfUser(userId: number, authorization: string
 
 export async function getDirectoriesOfDirectory(directoryId: number, authorization: string): Promise<DirectoryObject[]> {
   const headers = { Authorization: authorization } as Partial<Headers>;
-  return requester.get(`/api/directories?directoryId=${directoryId}`, headers);
+  return requester.get(`/api/directories?parentId=${directoryId}`, headers);
 }
 
 export async function getRootDirectoriesOfUser(userId: number, authorization: string): Promise<DirectoryObject[]> {
@@ -65,42 +61,6 @@ export async function getRootDirectoriesOfUser(userId: number, authorization: st
 }
 
 export async function getFileTreeOfUser(userId: number, authorization: string): Promise<DirectoryObject[]> {
-
-  const buildDirectoryTree = async (dir: DirectoryObject) => {
-    dir.tree = {
-      directories: null,
-      files: null,
-    } as DirectoryTree;
-
-    if (dir.treeOfIds.directoryIds.length !== 0) {
-      dir.tree.directories = [];
-      for (let directoryId of dir.treeOfIds.directoryIds) {
-        let directory = await getDirectory(directoryId, authorization);
-        await buildDirectoryTree(directory);
-        dir.tree.directories.push(directory);
-      }
-    }
-
-    if (dir.treeOfIds.fileIds.length !== 0) {
-      dir.tree.files = [];
-      for (let fileId of dir.treeOfIds.fileIds) {
-        let file = await getFile(fileId, authorization);
-        dir.tree.files.push(file);
-      }
-    }
-  }
-
-  let directories = await getRootDirectoriesOfUser(userId, authorization);
-
-  for (let directory of directories) {
-    await buildDirectoryTree(directory);
-  }
-
-  return directories;
-}
-
-
-export async function getFileTreeOfUser2(userId: number, authorization: string): Promise<DirectoryObject[]> {
 
   const buildDirectoryTree = async (dir: DirectoryObject) => {
     dir.tree = {

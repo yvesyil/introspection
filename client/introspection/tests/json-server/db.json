@@ -54,7 +54,7 @@
           1
         ]
       },
-      "directoryId": null
+      "parentId": null
     },
     {
       "id": 1,
@@ -67,18 +67,7 @@
         ],
         "directoryIds": []
       },
-      "directoryId": 0
-    },
-    {
-      "userId": 0,
-      "name": "try",
-      "root": false,
-      "treeOfIds": {
-        "fileIds": [],
-        "directoryIds": []
-      },
-      "directoryId": 0,
-      "id": 3
+      "parentId": 0
     }
   ],
   "files_template": [
@@ -88,7 +77,7 @@
       "name": "main.c",
       "type": "c-source",
       "content": "// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf(\"Hello, World!\");\n\treturn 0;\n}\n",
-      "directoryId": 0
+      "parentId": 0
     },
     {
       "id": 1,
@@ -96,7 +85,7 @@
       "name": "temp.txt",
       "type": "plaintext",
       "content": "testt",
-      "directoryId": 1
+      "parentId": 1
     }
   ],
   "files": [
@@ -105,8 +94,8 @@
       "userId": 0,
       "name": "main.c",
       "type": "c-source",
-      "content": "// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf(\"What\");\n\treturn 0;\n}\n",
-      "directoryId": 0
+      "content": "// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf(\"Let's change this\");\n\treturn 0;\n}\n",
+      "parentId": 0
     },
     {
       "id": 1,
@@ -114,14 +103,14 @@
       "name": "temp.txt",
       "type": "plaintext",
       "content": "test",
-      "directoryId": 1
+      "parentId": 1
     },
     {
       "userId": 0,
-      "content": "",
+      "content": "this is",
       "name": "test.c",
       "type": "text",
-      "directoryId": 0,
+      "parentId": 0,
       "id": 2
     }
   ]
