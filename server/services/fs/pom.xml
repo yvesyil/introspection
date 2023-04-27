@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ie.tus</groupId>
-    <artifactId>introspection</artifactId>
+    <artifactId>fs</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>introspection</name>
     <packaging>war</packaging>
@@ -54,6 +54,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.7.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

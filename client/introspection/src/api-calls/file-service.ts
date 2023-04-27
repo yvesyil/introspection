@@ -9,7 +9,7 @@ export type FileObject = {
   type: string,
   content: string,
   parentId: number,
-}
+};
 
 type DirectoryTree = {
   files: FileObject[] | null,
@@ -23,7 +23,7 @@ export type DirectoryObject = {
   root: boolean,
   tree: DirectoryTree,
   parentId: number | null,
-}
+};
 
 export async function getFile(fileId: number, authorization: string): Promise<FileObject> {
   const headers = { Authorization: authorization } as Partial<Headers>;
