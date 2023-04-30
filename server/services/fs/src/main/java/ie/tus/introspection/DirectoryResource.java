@@ -95,7 +95,7 @@ public class DirectoryResource {
         if (ddao.remove(Integer.parseInt(id))) {
             body.put("message", "Deleted directory");
             body.put("success", true);
-            status = Response.Status.NO_CONTENT;
+            status = Response.Status.OK;
         } else {
             body.put("message", "Could not delete directory");
             body.put("success", false);

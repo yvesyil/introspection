@@ -20,7 +20,14 @@ CREATE TABLE directory (
     parentId INT
 );
 
-INSERT INTO file (userId, name, type, content, parentId) VALUES (1, 'main.c', 'c-source', '// paste your code here\n#include <stdio.h>\n\nint main(void)\n{\n\tprintf(\"Hello, World!\");\n\treturn 0;\n}\n', 1);
+INSERT INTO file (userId, name, type, content, parentId) VALUES (1, 'main.c', 'c-source', '// paste your code here
+#include <stdio.h>
+
+int main(void)
+{
+    printf("Hello, World!");
+    return 0;
+}', 1);
 INSERT INTO file (userId, name, type, content, parentId) VALUES (1, 'temp.txt', 'text', 'Lorem ipsum dolor sit amet.', 2);
 
 INSERT INTO directory (userId, name, root, parentId) VALUES (1, 'root', TRUE, NULL);

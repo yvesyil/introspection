@@ -82,7 +82,7 @@ public class FileResource {
         if (fdao.remove(Integer.parseInt(id))) {
             body.put("message", "Deleted file");
             body.put("success", true);
-            status = Response.Status.NO_CONTENT;
+            status = Response.Status.OK;
         } else {
             body.put("message", "Could not delete file");
             body.put("success", false);
