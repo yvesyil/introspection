@@ -6,11 +6,19 @@ import java.util.Map;
 
 public class Directory {
     private Integer id;
-    private int userId;
+    private Integer userId;
     private String name;
     private boolean root;
     private DirectoryTree tree;
     private Integer parentId;
+
+    public Directory() {
+        this.id = null;
+        this.userId = null;
+        this.root = false;
+        this.tree = new DirectoryTree();
+        this.parentId = null;
+    }
 
     // Bare minimum directory
     public Directory(int userId, int parentId) {
@@ -21,12 +29,12 @@ public class Directory {
         this.parentId = parentId;
     }
 
-    public Directory(Integer id, int userId, String name, boolean root, DirectoryTree tree, Integer parentId) {
+    public Directory(Integer id, int userId, String name, boolean root, Integer parentId) {
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.root = root;
-        this.tree = tree;
+        this.tree = new DirectoryTree();
         this.parentId = parentId;
     }
 

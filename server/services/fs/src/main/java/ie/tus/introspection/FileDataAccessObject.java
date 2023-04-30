@@ -26,13 +26,13 @@ public class FileDataAccessObject {
 
     private File newFileFromResultSet(ResultSet rs) throws SQLException {
         return new File(
-                    rs.getInt("id"),
-                    rs.getInt("userId"),
-                    rs.getString("name"),
-                    rs.getString("type"),
-                    rs.getString("content"),
-                    rs.getInt("parentId")
-                    );
+                rs.getInt("id"),
+                rs.getInt("userId"),
+                rs.getString("name"),
+                rs.getString("type"),
+                rs.getString("content"),
+                rs.getInt("parentId")
+        );
     }
 
     public List<File> getAll() {
@@ -40,6 +40,32 @@ public class FileDataAccessObject {
         String query = "SELECT * FROM file";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                files.add(newFileFromResultSet(rs));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return files;
+    }
+
+    public List<File> getFilesWhere(String key, String type, String value) {
+        List<File> files = new ArrayList<>();
+        String query = String.format("SELECT * FROM file WHERE %s = ?", key);
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            switch (type.toLowerCase()) {
+                case "int":
+                    ps.setInt(1, Integer.parseInt(value));
+                    break;
+                case "string":
+                    ps.setString(1, value);
+                    break;
+                case "boolean":
+                    ps.setBoolean(1, Boolean.parseBoolean(value));
+                    break;
+            }
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 files.add(newFileFromResultSet(rs));

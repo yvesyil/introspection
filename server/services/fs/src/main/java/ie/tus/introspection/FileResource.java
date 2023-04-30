@@ -2,7 +2,6 @@ package ie.tus.introspection;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
-
 import java.util.*;
 
 @Path("/files")
@@ -10,9 +9,19 @@ public class FileResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<File> getAllFiles() {
+    public List<File> getAllFiles(
+            @QueryParam("parentId") @DefaultValue("") String parentId
+    ) {
+        if (!parentId.isBlank()) {
+            return getAllFilesByParentId(parentId);
+        }
         FileDataAccessObject fdao = FileDataAccessObject.getInstance();
         return fdao.getAll();
+    }
+
+    private List<File> getAllFilesByParentId(String parentId) {
+        FileDataAccessObject fdao = FileDataAccessObject.getInstance();
+        return fdao.getFilesWhere("parentId", "int", parentId);
     }
 
     @GET
