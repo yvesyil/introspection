@@ -46,14 +46,6 @@
       "userId": 0,
       "name": "src",
       "root": true,
-      "treeOfIds": {
-        "fileIds": [
-          0
-        ],
-        "directoryIds": [
-          1
-        ]
-      },
       "parentId": null
     },
     {
@@ -61,12 +53,6 @@
       "userId": 0,
       "name": "temp",
       "root": false,
-      "treeOfIds": {
-        "fileIds": [
-          1
-        ],
-        "directoryIds": []
-      },
       "parentId": 0
     }
   ],

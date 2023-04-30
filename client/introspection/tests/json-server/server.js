@@ -34,6 +34,7 @@ server.use('/api', async (req, res, next) => {
 });
 
 // auth middleware
+/*
 server.use('/api', (req, res, next) => {
   if (publicRoutes.has(req.path)) {
     return next();
@@ -48,6 +49,7 @@ server.use('/api', (req, res, next) => {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 })
+*/
 
 
 server.post('/api/login', async (req, res) => {
@@ -96,9 +98,9 @@ server.put('/api/files/:id', async (req, res) => {
 
     db.data.files = newfiles;
 
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ err });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error });
   }
 
   await db.write();
@@ -112,9 +114,9 @@ server.get('/api/files/:id', async (req, res) => {
   let file;
   try {
     [ file ] = db.data.files.filter(obj => obj.id === id);
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ err });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
   }
 
   return res.json(file);
@@ -147,9 +149,9 @@ server.delete('/api/files/:id', async (req, res) => {
     const newfiles = db.data.files.filter(obj => obj.id !== id);
 
     db.data.files = newfiles;
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ err });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
   }
 
   await db.write();
@@ -166,9 +168,9 @@ server.delete('/api/directories/:id', async (req, res) => {
 
     db.data.directories = newdirectories;
     db.data.files = newfiles;
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ err });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
   }
 
   await db.write();
