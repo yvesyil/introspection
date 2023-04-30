@@ -159,13 +159,32 @@ server.delete('/api/directories/:id', async (req, res) => {
 
 server.post('/api/compile', async (req, res) => {
   // TODO fake compilation handling
+  const directiveBlacklist = new Set([
+    'section',
+    'build_version',
+    'intel_syntax',
+    'globl',
+    'p2align',
+    'subsections_via_symbols'
+  ]);
   const file = req.body;
   const compilerOptions = '-S -O0 -fno-asynchronous-unwind-tables -fverbose-asm -masm=intel';
 
   let output = '';
   let error = null;
   try {
-    output = execSync(`echo ${JSON.stringify(file.content)} | clang ${compilerOptions} -x c - -o -`).toString();
+    output = execSync(`echo ${JSON.stringify(file.content)} | clang ${compilerOptions} -x c - -o -`).toString().split('\n');
+    output = output.filter(line => {
+      let flag = true;
+      for (let directive of directiveBlacklist) {
+        let pattern = new RegExp(`.${directive}`);
+        if (line.match(pattern)) {
+          flag = false;
+        }
+      }
+      return flag;
+    });
+    output = output.join('\n');
   } catch (err) {
     error = err.toString();
   }
