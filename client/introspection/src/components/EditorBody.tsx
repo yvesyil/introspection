@@ -1,6 +1,7 @@
 import Editor, { useMonaco } from "@monaco-editor/react";
 import { useCallback, useEffect, useState } from "react";
 import GithubDarkTheme from '../assets/github-dark.json';
+import AsmSyntax from '../assets/x86asm';
 import { editor } from "monaco-editor";
 import { FileObject, putFile } from "../api-calls/file-service";
 import { debounce } from "../utils";
@@ -54,6 +55,8 @@ export default function EditorBody({ config, openFile, output, setOpenFile }: {
     if (monaco) {
       monaco.editor.defineTheme('github-dark', GithubDarkTheme as editor.IStandaloneThemeData);
       monaco.editor.setTheme('github-dark');
+      monaco.languages.register({id: 'asm'});
+      monaco.languages.setMonarchTokensProvider('asm', AsmSyntax);
     }
   }, [monaco]);
 
@@ -85,7 +88,7 @@ export default function EditorBody({ config, openFile, output, setOpenFile }: {
       />
       <Editor
         width={`${config.width / 2}px`}
-        defaultLanguage="plaintext"
+        defaultLanguage="asm"
         theme="vs-dark"
         value={output.error ? output.error : output.content}
         options={{
