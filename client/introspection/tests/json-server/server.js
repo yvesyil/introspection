@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { Low } from 'lowdb';
 import { JSONFile } from 'lowdb/node';
 import { execSync } from 'child_process';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const server = jsonServer.create();
 const middlewares = jsonServer.defaults();
@@ -34,7 +35,6 @@ server.use('/api', async (req, res, next) => {
 });
 
 // auth middleware
-/*
 server.use('/api', (req, res, next) => {
   if (publicRoutes.has(req.path)) {
     return next();
@@ -49,7 +49,6 @@ server.use('/api', (req, res, next) => {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 })
-*/
 
 
 server.post('/api/login', async (req, res) => {
@@ -122,25 +121,6 @@ server.get('/api/files/:id', async (req, res) => {
   return res.json(file);
 });
 
-server.post('/api/compile', async (req, res) => {
-  // TODO fake compilation handling
-  const file = req.body;
-  const compilerOptions = '-S -O0 -fno-asynchronous-unwind-tables -fverbose-asm -masm=intel';
-
-  let output = '';
-  let error = null;
-  try {
-    output = execSync(`echo ${JSON.stringify(file.content)} | clang ${compilerOptions} -x c - -o -`).toString();
-  } catch (err) {
-    error = err.toString();
-  }
-
-  return res.json({
-    error: error,
-    content: output,
-  });
-});
-
 server.delete('/api/files/:id', async (req, res) => {
   await db.read(); 
   const id = Number(req.params.id);
@@ -177,6 +157,24 @@ server.delete('/api/directories/:id', async (req, res) => {
   return res.status(200).json({ status: 'removed item' });
 });
 
+server.post('/api/compile', async (req, res) => {
+  // TODO fake compilation handling
+  const file = req.body;
+  const compilerOptions = '-S -O0 -fno-asynchronous-unwind-tables -fverbose-asm -masm=intel';
+
+  let output = '';
+  let error = null;
+  try {
+    output = execSync(`echo ${JSON.stringify(file.content)} | clang ${compilerOptions} -x c - -o -`).toString();
+  } catch (err) {
+    error = err.toString();
+  }
+
+  return res.json({
+    error: error,
+    content: output,
+  });
+});
 
 server.use('/api', router);
 

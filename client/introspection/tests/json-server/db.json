@@ -34,7 +34,7 @@
   ],
   "users": [
     {
-      "id": 0,
+      "id": 1,
       "email": "root@email.com",
       "name": "root",
       "password": "root"
@@ -42,14 +42,14 @@
   ],
   "directories": [
     {
-      "id": 0,
+      "id": 1,
       "userId": 0,
       "name": "src",
       "root": true,
       "parentId": null
     },
     {
-      "id": 1,
+      "id": 2,
       "userId": 0,
       "name": "temp",
       "root": false,
@@ -58,7 +58,7 @@
   ],
   "files_template": [
     {
-      "id": 0,
+      "id": 1,
       "userId": 0,
       "name": "main.c",
       "type": "c-source",
@@ -66,7 +66,7 @@
       "parentId": 0
     },
     {
-      "id": 1,
+      "id": 2,
       "userId": 0,
       "name": "temp.txt",
       "type": "plaintext",
@@ -76,7 +76,7 @@
   ],
   "files": [
     {
-      "id": 0,
+      "id": 1,
       "userId": 0,
       "name": "main.c",
       "type": "c-source",
@@ -84,7 +84,7 @@
       "parentId": 0
     },
     {
-      "id": 1,
+      "id": 2,
       "userId": 0,
       "name": "temp.txt",
       "type": "plaintext",
@@ -97,7 +97,7 @@
       "name": "test.c",
       "type": "text",
       "parentId": 0,
-      "id": 2
+      "id": 3
     }
   ]
 }

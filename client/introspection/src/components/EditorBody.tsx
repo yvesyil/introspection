@@ -2,7 +2,7 @@ import Editor, { useMonaco } from "@monaco-editor/react";
 import { useCallback, useEffect, useState } from "react";
 import GithubDarkTheme from '../assets/github-dark.json';
 import { editor } from "monaco-editor";
-import { FileObject, getFile, getFilesOfUser, putFile } from "../api-calls/file-service";
+import { FileObject, putFile } from "../api-calls/file-service";
 import { debounce } from "../utils";
 import { useAuthUser, useIsAuthenticated, useAuthHeader } from "react-auth-kit";
 import WindowConfig from "../interfaces/window";
