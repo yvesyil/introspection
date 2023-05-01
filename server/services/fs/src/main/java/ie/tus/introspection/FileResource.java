@@ -1,22 +1,66 @@
 package ie.tus.introspection;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
+import jakarta.xml.bind.DatatypeConverter;
+
+import java.security.MessageDigest;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Path("/files")
 public class FileResource {
 
+    private static String calculateEtag(List<File> files) throws Exception {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        ObjectMapper mapper = new ObjectMapper();
+        String serialized = mapper.writeValueAsString(files);
+
+        byte[] hash = md.digest(serialized.getBytes());
+
+        return DatatypeConverter.printHexBinary(hash);
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<File> getAllFiles(
-            @QueryParam("parentId") @DefaultValue("") String parentId
+    public Response getAllFiles(
+            @QueryParam("parentId") @DefaultValue("") String parentId,
+            @Context Request request
     ) {
+        List<File> files;
+
         if (!parentId.isBlank()) {
-            return getAllFilesByParentId(parentId);
+            files = getAllFilesByParentId(parentId);
+        } else {
+            FileDataAccessObject fdao = FileDataAccessObject.getInstance();
+            files = fdao.getAll();
         }
-        FileDataAccessObject fdao = FileDataAccessObject.getInstance();
-        return fdao.getAll();
+
+        try {
+            EntityTag etag = new EntityTag(calculateEtag(files));
+
+            // set the cache control headers for the response
+            CacheControl cc = new CacheControl();
+            cc.setNoCache(false);
+            cc.setPrivate(true);
+            cc.setMustRevalidate(true);
+            cc.setMaxAge(60 * 60); // 1 hour
+
+            // check if the client has a matching entity tag
+            Response.ResponseBuilder builder = request.evaluatePreconditions(etag);
+            if (builder != null) {
+                // client has a matching entity tag, return a 304 Not Modified response
+                return builder.cacheControl(cc).build();
+            }
+            // client does not have a matching entity tag, return a full response
+            return Response.ok(files).cacheControl(cc).tag(etag).build();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return Response.serverError().build();
+        }
     }
 
     private List<File> getAllFilesByParentId(String parentId) {

@@ -1,6 +1,10 @@
 package ie.tus.introspection;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.xml.bind.DatatypeConverter;
+
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.sql.*;
 import java.util.*;
 
