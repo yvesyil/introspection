@@ -18,44 +18,19 @@ public class File {
     private String content;
     private Long parentId;
 
-    public File() {
-        this.userId = null;
-        this.name = "";
-        this.type = "";
-        this.content = "";
-        this.parentId = null;
-    }
-
-    // Bare minimum file
-    public File(long userId, String name, long parentId) {
-        this.userId = userId;
-        this.name = name;
-        this.type = "text";
-        this.content = "";
-        this.parentId = parentId;
-    }
-
-    public File(long userId, String name, String type, String content, long parentId) {
-        this.userId = userId;
-        this.name = name;
-        this.type = type;
-        this.content = content;
-        this.parentId = parentId;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -87,7 +62,7 @@ public class File {
         return parentId;
     }
 
-    public void setParentId(long parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 }
