@@ -1,9 +1,6 @@
 package cc.introspection.fs.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class File {
@@ -15,8 +12,20 @@ public class File {
     private Long userId;
     private String name;
     private String type;
+
+    @Column(length = 30000)
     private String content;
     private Long parentId;
+
+    public File() { }
+
+    public File(Long userId, String name, String type, String content, Long parentId) {
+        this.userId = userId;
+        this.name = name;
+        this.type = type;
+        this.content = content;
+        this.parentId = parentId;
+    }
 
     public Long getId() {
         return id;

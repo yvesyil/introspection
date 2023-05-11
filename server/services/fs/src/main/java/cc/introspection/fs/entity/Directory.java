@@ -3,6 +3,7 @@ package cc.introspection.fs.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Directory {
@@ -14,6 +15,15 @@ public class Directory {
     private String name;
     private Boolean root;
     private Long parentId;
+
+    public Directory() { }
+
+    public Directory(Long userId, String name, Boolean root, Long parentId) {
+        this.userId = userId;
+        this.name = name;
+        this.root = root;
+        this.parentId = parentId;
+    }
 
     public Long getId() {
         return id;
