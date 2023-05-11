@@ -1,21 +1,18 @@
-package cc.introspection.fs;
+package cc.introspection.fs.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class File {
+public class Directory {
 
     @Id
     @GeneratedValue
     private Long id;
-
     private Long userId;
     private String name;
-    private String type;
-    private String content;
+    private Boolean root;
     private Long parentId;
 
     public Long getId() {
@@ -42,21 +39,14 @@ public class File {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public Boolean isRoot() {
+        return root;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setRoot(Boolean root) {
+        this.root = root;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     public Long getParentId() {
         return parentId;

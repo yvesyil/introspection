@@ -1,5 +1,8 @@
-package cc.introspection.fs;
+package cc.introspection.fs.controller;
 
+import cc.introspection.fs.exception.FileNotFoundException;
+import cc.introspection.fs.repository.FileRepository;
+import cc.introspection.fs.entity.File;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,5 +1,6 @@
-package cc.introspection.fs;
+package cc.introspection.fs.controller.advice;
 
+import cc.introspection.fs.exception.DirectoryNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

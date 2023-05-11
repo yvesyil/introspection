@@ -1,4 +1,4 @@
-package cc.introspection.fs;
+package cc.introspection.fs.exception;
 
 public class DirectoryNotFoundException extends RuntimeException {
     public DirectoryNotFoundException(Long id) {
