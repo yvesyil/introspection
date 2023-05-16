@@ -1,8 +1,11 @@
 package cc.introspection.fs.controller;
 
+import cc.introspection.fs.entity.SuccessMessage;
 import cc.introspection.fs.exception.FileNotFoundException;
 import cc.introspection.fs.repository.FileRepository;
 import cc.introspection.fs.entity.File;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,22 +37,25 @@ public class FileController {
     }
 
     @PutMapping("/files/{id}")
-    public File update(@PathVariable Long id, @RequestBody File file) {
+    public ResponseEntity<SuccessMessage> update(@PathVariable Long id, @RequestBody File file) {
         return repository.findById(id)
                 .map(f -> {
                     f.setName(file.getName());
                     f.setContent(file.getContent());
                     f.setType(file.getType());
-                    return repository.save(f);
+                    repository.save(f);
+                    return ResponseEntity.ok(new SuccessMessage(true, "File saved"));
                 })
-                .orElseGet(() -> {
-                    file.setId(id);
-                    return repository.save(file);
-                });
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SuccessMessage(false, "File not found")));
     }
 
     @DeleteMapping("/files/{id}")
-    public void delete(@PathVariable Long id) {
-        repository.deleteById(id);
+    public ResponseEntity<SuccessMessage> delete(@PathVariable Long id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return ResponseEntity.ok(new SuccessMessage(true, "File deleted"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SuccessMessage(false, "File not found"));
+        }
     }
 }

@@ -2,9 +2,12 @@ package cc.introspection.fs.controller;
 
 import cc.introspection.fs.entity.Directory;
 import cc.introspection.fs.entity.File;
+import cc.introspection.fs.entity.SuccessMessage;
 import cc.introspection.fs.exception.DirectoryNotFoundException;
 import cc.introspection.fs.repository.DirectoryRepository;
 import cc.introspection.fs.repository.FileRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,27 +49,34 @@ public class DirectoryController {
         return fileRepository.findByParentId(id);
     }
 
-    @PostMapping("/directories/{id}")
+    @PostMapping("/directories")
     public Directory add(@RequestBody Directory directory) {
         return repository.save(directory);
     }
 
     @PutMapping("/directories/{id}")
-    public Directory update(@PathVariable Long id, @RequestBody Directory directory) {
+    public ResponseEntity<SuccessMessage> update(@PathVariable Long id, @RequestBody Directory directory) {
         return repository.findById(id)
                 .map(d -> {
                     d.setName(directory.getName());
                     d.setParentId(directory.getParentId());
-                    return repository.save(d);
+                    repository.save(d);
+                    return ResponseEntity.ok(new SuccessMessage(true, "Directory saved"));
                 })
-                .orElseGet(() -> {
-                    directory.setId(id);
-                    return repository.save(directory);
-                });
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SuccessMessage(false, "Directory not found")));
     }
 
     @DeleteMapping("/directories/{id}")
-    public void delete(@PathVariable Long id) {
-        repository.deleteById(id);
+    public ResponseEntity<SuccessMessage> delete(@PathVariable Long id) {
+        if (repository.existsById(id)) {
+            List<File> files = fileRepository.findByParentId(id);
+            for (File file : files) {
+                fileRepository.deleteById(file.getId());
+            }
+            repository.deleteById(id);
+            return ResponseEntity.ok(new SuccessMessage(true, "Directory deleted"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SuccessMessage(false, "Directory not found"));
+        }
     }
 }
