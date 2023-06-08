@@ -1,0 +1,67 @@
+services:
+  fs:
+    container_name: fs
+    image: fs:latest
+    build:
+      context: fs
+      dockerfile: Dockerfile
+    ports:
+      - "3333:3333"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - backend
+
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fs
+    ports:
+      - "3306:3306"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      interval: 1s
+      retries: 10
+
+  usr:
+    container_name: usr
+    image: usr:latest
+    build:
+      context: usr
+      dockerfile: Dockerfile
+    ports:
+      - "4444:4444"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - backend
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:6.0
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: dev
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      timeout: 20s
+      interval: 1s
+      retries: 10
+
+networks:
+  backend:
+    driver: bridge

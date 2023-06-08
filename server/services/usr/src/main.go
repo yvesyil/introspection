@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load("../.env"); err != nil {
+	if err := godotenv.Load(".env"); err != nil {
 		panic(err)
 	}
 
@@ -30,6 +30,7 @@ func main() {
 
 	api := r.Group("/api")
 	{
+		api.POST("/login", handlers.Login)
 		user := api.Group("/users")
 		{
 			uh := handlers.NewUserHandler(repos.NewUserRepository())
