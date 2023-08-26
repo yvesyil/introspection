@@ -17,6 +17,7 @@ services:
     container_name: mysql
     image: mysql:8.0
     environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: fs
     ports:
@@ -24,7 +25,7 @@ services:
     networks:
       - backend
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
       interval: 1s
       retries: 10
